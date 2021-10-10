@@ -124,4 +124,4 @@ class MyClient(discord.Client):
                         await mess.add_reaction('a:tut_herz:662606955520458754')
 
 client = MyClient()
-client.run("ODg4NzExNTQyNDQ5Nzk1MDcz.YUWrHw.PHDQPLw7XvzEpn-S4dswcaa2Z70")
+client.run("YourBotToken")
