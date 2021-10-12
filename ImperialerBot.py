@@ -1,4 +1,6 @@
 import discord
+from discord import activity
+from discord.ext import commands, tasks
 import random
 import os
 from discord.enums import ActivityType
@@ -12,19 +14,43 @@ import json, asyncio
 import pytz
 from datetime import datetime
 from discord import Member
+from discord.ext.commands import Bot
+import time
 import asyncio
 
-description = """
-Moin! Ich wurde von Arasp Shojai, den heftigsten Typen der Welt, geschrieben!
-"""
-
 class MyClient(discord.Client):
-    async def  on_ready(self):
+    async def on_ready(self):
         print("Der Imperialer Bot ist nun bereit! Lang lebe das Imperium!")
-
+        while True:
+            await client.change_presence(activity=discord.Game('https://discord.gg/7PMrd8cdFy'), status=discord.Status.online)
+            await asyncio.sleep(5)
+            await client.change_presence(activity=discord.Game('https://www.youtube.com/channel/UCOKurTE8Frp_A76NgthkRyg'), status=discord.Status.online)
+            await asyncio.sleep(5)
+            await client.change_presence(activity=discord.Game('Der imperiale Bot!'), status=discord.Status.online)
+            await asyncio.sleep(5)
+            await client.change_presence(activity=discord.Game('Lang lebe das Imperium!'), status=discord.Status.online)
+            await asyncio.sleep(5)
+            await client.change_presence(activity=discord.Game('Besuche meine Webseite:'), status=discord.Status.online)
+            await asyncio.sleep(2)
+            await client.change_presence(activity=discord.Game('lernenmitherrshojai.de'), status=discord.Status.online)
+            await asyncio.sleep(3)
+            await client.change_presence(activity=discord.Game('Schreibe Hi Bot!'), status=discord.Status.online)
+            await asyncio.sleep(5)
+            await client.change_presence(activity=discord.Game('Am 18.10.2021 fängt die Schule wieder an!'), status=discord.Status.online)
+            await asyncio.sleep(5)
+            await client.change_presence(activity=discord.Game('Folge mir auf Instagram!'), status=discord.Status.online)
+            await asyncio.sleep(2)
+            await client.change_presence(activity=discord.Game('@arasp_sh_'), status=discord.Status.online)
+            await asyncio.sleep(3)
+            await client.change_presence(activity=discord.Game('?help'), status=discord.Status.online)
+            await asyncio.sleep(5)
+  
     async def on_message(self, message):
         print("Nachricht von " + str(message.author) + " enthält " + str(message.content))
         if message.author == client.user:
+            return
+        
+        if message.author.bot:
             return
 
         if message.content.startswith("?help"):
@@ -35,7 +61,9 @@ class MyClient(discord.Client):
                                  '- ?meetings \r\n'
                                  '- ?games \r\n'
                                  '- ?website \r\n'
-                                 '- ?youtube \r\n')
+                                 '- ?youtube \r\n'
+                                 '- ?instagram \r\n'
+                                 '- ?clear \r\n')
 
         if message.content.startswith("Hi Bot!"):
             await message.channel.send('Hiiiiiiiiiiiiiiiiii!')
@@ -60,7 +88,9 @@ class MyClient(discord.Client):
                                        '   red \r\n'
                                        '   Eine Zahl zwischen 0 und 36 \r\n'
                                        '\r\n'
-                                       '-  \r\n')
+                                       '- Wahrsager: ?8ball + Deine Frage eingeben und abwarten!\r\n'
+                                       '\r\n'
+                                       '- \r\n')
         
         if message.content.startswith("?website"):
             await message.channel.send('Besuche meine Webseite! \r\n'
@@ -70,6 +100,9 @@ class MyClient(discord.Client):
             await message.channel.send('Besuche mein Youtube-Kanal! \r\n'
                                        'https://www.youtube.com/channel/UCOKurTE8Frp_A76NgthkRyg')
 
+        if message.content.startswith("?instagram"):
+             await message.channel.send('Folge mir auf Instagram! \r\n'
+                                        'https://www.instagram.com/arasp_sh_')
 
         if message.content.startswith("?roulette"):
             bid = message.content.split(' ')[1]
@@ -98,30 +131,6 @@ class MyClient(discord.Client):
                 await message.channel.send('Du hast gewonnen!!!!')
             else:
                 await message.channel.send('Haha etchi patch, du hast verloren!')
-
-        if message.content.startswith('?userinfo'):
-            args = message.content.split(' ')
-            if len(args) == 2:
-                member = Member = discord.utils.find(lambda m: args[1] in m.name, message.guild.members)
-                if member:
-                    embed = discord.Embed(title='Userinfo für {}'.format(member.name),
-                                          description='Dies ist eine Userinfo für den User {}'.format(member.mention),
-                                          color=0x22a7f0)
-                    embed.add_field(name='Server beigetreten', value=member.joined_at.strftime('%d/%m/%Y, %H:%M:%S'),
-                                    inline=True)
-                    embed.add_field(name='Discord beigetreten', value=member.created_at.strftime('%d/%m/%Y, %H:%M:%S'),
-                                    inline=True)
-                    rollen = ''
-                    for role in member.roles:
-                        if not role.is_default():
-                            rollen += '{} \r\n'.format(role.mention)
-                    if rollen:
-                        embed.add_field(name='Rollen', value=rollen, inline=True)
-                        embed.set_thumbnail(url=member.avatar_url)
-                        embed.set_footer(text='EmbedFooter')
-                        mess = await message.channel.send(embed=embed)
-                        await mess.add_reaction('🚍')
-                        await mess.add_reaction('a:tut_herz:662606955520458754')
 
 client = MyClient()
 client.run("YourBotToken")
